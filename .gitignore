@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# W&B logs and metadata
+wandb/
+.wandb
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+
+# VSCode & PyCharm project configs (optional)
+.vscode/
+.idea/
+
+# Environment & dependency folders
+.env/
+.venv/
+env/
+venv/
+pip-log.txt
+
+# Sweep YAMLs / run configs (optional if auto-generated)
+sweep.yaml
