@@ -580,8 +580,8 @@ def visualize_prediction_probs(
         num_rows, 5,
         width_ratios=[1, 0.03, 1, 0.03, 0.1],
         height_ratios=[1] * num_rows,
-        hspace=0.3,
-        wspace=0.25
+        hspace=0.35,
+        wspace=0.35
     )
 
     cmap = 'rocket_r'
@@ -616,12 +616,12 @@ def visualize_prediction_probs(
         #ax.set_xticklabels(xtick_labels, rotation=90, fontsize=8)
         ax.set_xticks([])
         ax.set_xticklabels([])
-        ax.set_xlabel("Time Index", fontsize=9)
+        ax.set_xlabel("Time Index", fontsize=14)
         ax.set_yticks(tick_positions)
-        ax.set_yticklabels(tick_labels, rotation=0, fontsize=9)
-        ax.set_xlabel("Time Index", fontsize=9)
-        ax.set_ylabel("Class", fontsize=9)
-        ax.set_title(f'{mode_names[mode_idx]}', fontsize=10)
+        ax.set_yticklabels(tick_labels, rotation=0, fontsize=12)
+        ax.set_xlabel("Time Index", fontsize=14)
+        ax.set_ylabel("Class", fontsize=14)
+        ax.set_title(f'{mode_names[mode_idx]}', fontsize=16)
 
         for x in range(len(time_steps)):
             ax.axvline(x, color='gray', linewidth=0.2, alpha=0.3)
@@ -632,6 +632,7 @@ def visualize_prediction_probs(
     sm = plt.cm.ScalarMappable(cmap='rocket_r', norm=norm)
     sm.set_array([])
     fig.colorbar(sm, cax=cbar_ax, orientation='vertical', label="Probability")
+    cbar_ax.set_ylabel('Probability', fontsize=14)
 
     # Save plot
     # Format selected mode indices with zero-padding
