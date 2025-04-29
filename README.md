@@ -9,9 +9,9 @@ This repository contains the implementation of a transformer-based framework for
 ├── notebooks/    # Jupyter notebooks (e.g., pipeline.ipynb for reproducing results)
 ├── results/      # Generated results (plots, predictions)
 ├── src/          # Source code modules (data, model, loss, inference, evaluator, utils, HPO (hyperparameter optimization))
+├── .gitignore  
 ├── README.md     # Project overview (this file)
-├── .gitignore    
-├── requirements.txt # Python dependencies
+├── requirements.txt   # Python dependencies
 ```
 ## Getting Started
 ### Installation
