@@ -110,7 +110,7 @@ class ADMetrics(Evaluator):
         recalls = [] 
         type_wise_metrics = {}
         for anomaly_type in range(1, self.num_classes):
-            type_wise_metrics[anomaly_type] = {"recall": 0, "f_score": 0, "recalls": []}
+            type_wise_metrics[anomaly_type] = {"recall": 0, "recalls": []}
        
         for trace_labels, trace_preds in zip(traces_labels, traces_preds):
             true_anomalies = utils.extract_anomalies_from_trace(trace_labels)
@@ -125,12 +125,12 @@ class ADMetrics(Evaluator):
                 ]
             
             if all_true_ranges:
-                recall_ = sum(self.compute_range_recall(true_range, all_pred_ranges) for true_range in all_true_ranges) / len(all_true_ranges)
-                recalls.append(recall_)
+                recall_ = [self.compute_range_recall(true_range, all_pred_ranges) for true_range in all_true_ranges]
+                recalls.extend(recall_)
 
             if all_pred_ranges:
-                precision_ = sum(self.compute_range_precision(pred_range, all_true_ranges) for pred_range in all_pred_ranges) / len(all_pred_ranges)
-                precisions.append(precision_)
+                precision_ = [self.compute_range_precision(pred_range, all_true_ranges) for pred_range in all_pred_ranges]
+                precisions.extend(precision_)
 
             for anomaly_type in range(1, self.num_classes):
                 
@@ -140,8 +140,8 @@ class ADMetrics(Evaluator):
 
                 # Compute recall for each true range
                 if true_ranges:
-                    recall_ = sum(self.compute_range_recall(true_range, all_pred_ranges) for true_range in true_ranges) / len(true_ranges)
-                    type_wise_metrics[anomaly_type]["recalls"].append(recall_)
+                    recall_ = [self.compute_range_recall(true_range, all_pred_ranges) for true_range in true_ranges]
+                    type_wise_metrics[anomaly_type]["recalls"].extend(recall_)
         
         # Average precision and recall
         precision = np.mean(precisions) if precisions else 0
@@ -150,7 +150,7 @@ class ADMetrics(Evaluator):
 
         for anomaly_type, metrics in type_wise_metrics.items():     
             type_wise_metrics[anomaly_type]["recall"] = np.mean(type_wise_metrics[anomaly_type]["recalls"]) if type_wise_metrics[anomaly_type]["recalls"] else 0
-            type_wise_metrics[anomaly_type]["f_score"] = self.get_f_beta_score(precision, type_wise_metrics[anomaly_type]["recall"])
+          
 
         return f_score, precision, recall, type_wise_metrics
 
@@ -187,15 +187,15 @@ class ADMetrics(Evaluator):
 
                 # Compute recall for each true range
                 if true_ranges:
-                    recall_ = sum(self.compute_range_recall(true_range, pred_ranges) for true_range in true_ranges) / len(true_ranges)
-                    recalls.append(recall_)
-                    type_wise_metrics[anomaly_type]["recalls"].append(recall_)
+                    recall_ = [self.compute_range_recall(true_range, pred_ranges) for true_range in true_ranges]
+                    recalls.extend(recall_)
+                    type_wise_metrics[anomaly_type]["recalls"].extend(recall_)
 
                 # Compute precision for each predicted range
                 if pred_ranges:
-                    precision_ = sum(self.compute_range_precision(pred_range, true_ranges) for pred_range in pred_ranges) / len(pred_ranges)
-                    precisions.append(precision_)
-                    type_wise_metrics[anomaly_type]["precisions"].append(precision_)
+                    precision_ = [self.compute_range_precision(pred_range, true_ranges) for pred_range in pred_ranges]
+                    precisions.extend(precision_)
+                    type_wise_metrics[anomaly_type]["precisions"].extend(precision_)
         
         # Average precision and recall
         precision = np.mean(precisions) if precisions else 0

@@ -345,15 +345,14 @@ def save_binary_AD_metrics(model_name, filename, ad_levels, global_f_scores, glo
             # Prepare new data as a DataFrame
             new_data = {
                 "Model Name": [model_name],
-                "F1": [round(global_f_scores[i], 3)],
-                "Precision": [round(global_precisions[i], 3)],
-                "Recall": [round(global_recalls[i], 3)],
+                "F1": [round(global_f_scores[i], 5)],
+                "Precision": [round(global_precisions[i], 5)],
+                "Recall": [round(global_recalls[i], 5)],
             }
 
             # Adding type-wise metrics in the requested format
             for anomaly_type in types_wise_metrics.keys():
-                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} F1"] = [round(types_wise_metrics[anomaly_type][i]["f_score"], 3)]
-                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} Recall"] = [round(types_wise_metrics[anomaly_type][i]["recall"], 3)]
+                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} Recall"] = [round(types_wise_metrics[anomaly_type][i]["recall"], 5)]
 
             df_new = pd.DataFrame(new_data)
 
@@ -374,18 +373,16 @@ def save_binary_AD_metrics(model_name, filename, ad_levels, global_f_scores, glo
 
         summary_df = pd.DataFrame({
         "Model Name": [model_name],
-        "F1": [round(weighted_f1, 3)],
-        "Precision": [round(weighted_precision, 3)],
-        "Recall": [round(weighted_recall, 3)]
+        "F1": [round(weighted_f1, 5)],
+        "Precision": [round(weighted_precision, 5)],
+        "Recall": [round(weighted_recall, 5)]
         })
 
         # Add weighted type-wise metrics
         for anomaly_type in types_wise_metrics.keys():
             idx = list(types_wise_metrics.keys()).index(anomaly_type) + 1
-            weighted_type_f1 = sum(w * types_wise_metrics[anomaly_type][i]["f_score"] for i, w in enumerate(ad_weights))
             weighted_type_recall = sum(w * types_wise_metrics[anomaly_type][i]["recall"] for i, w in enumerate(ad_weights))
-            summary_df[f"T{idx} F1"] = [round(weighted_type_f1, 3)]
-            summary_df[f"T{idx} Recall"] = [round(weighted_type_recall, 3)]
+            summary_df[f"T{idx} Recall"] = [round(weighted_type_recall, 5)]
 
         # If the sheet exists, read existing data, append, and overwrite
         if file_exists and sheet_name in book.sheetnames:
@@ -418,16 +415,16 @@ def save_multiclass_AD_metrics(model_name, filename, ad_levels, global_f_scores,
             # Prepare new data as a DataFrame
             new_data = {
                 "Model Name": [model_name],
-                "F1": [round(global_f_scores[i], 3)],
-                "Precision": [round(global_precisions[i], 3)],
-                "Recall": [round(global_recalls[i], 3)],
+                "F1": [round(global_f_scores[i], 5)],
+                "Precision": [round(global_precisions[i], 5)],
+                "Recall": [round(global_recalls[i], 5)],
             }
 
             # Adding type-wise metrics in the requested format
             for anomaly_type in types_wise_metrics.keys():
-                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} F1"] = [round(types_wise_metrics[anomaly_type][i]["f_score"], 3)]
-                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} Precision"] = [round(types_wise_metrics[anomaly_type][i]["precision"], 3)]
-                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} Recall"] = [round(types_wise_metrics[anomaly_type][i]["recall"], 3)]
+                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} F1"] = [round(types_wise_metrics[anomaly_type][i]["f_score"], 5)]
+                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} Precision"] = [round(types_wise_metrics[anomaly_type][i]["precision"], 5)]
+                new_data[f"T{list(types_wise_metrics.keys()).index(anomaly_type) + 1} Recall"] = [round(types_wise_metrics[anomaly_type][i]["recall"], 5)]
 
             df_new = pd.DataFrame(new_data)
 
@@ -448,9 +445,9 @@ def save_multiclass_AD_metrics(model_name, filename, ad_levels, global_f_scores,
 
         summary_df = pd.DataFrame({
         "Model Name": [model_name],
-        "F1": [round(weighted_f1, 3)],
-        "Precision": [round(weighted_precision, 3)],
-        "Recall": [round(weighted_recall, 3)]
+        "F1": [round(weighted_f1, 5)],
+        "Precision": [round(weighted_precision, 5)],
+        "Recall": [round(weighted_recall, 5)]
         })
 
         # Add weighted type-wise metrics
@@ -459,9 +456,9 @@ def save_multiclass_AD_metrics(model_name, filename, ad_levels, global_f_scores,
             weighted_type_f1 = sum(w * types_wise_metrics[anomaly_type][i]["f_score"] for i, w in enumerate(ad_weights))
             weighted_type_recall = sum(w * types_wise_metrics[anomaly_type][i]["recall"] for i, w in enumerate(ad_weights))
             weighted_type_precision = sum(w * types_wise_metrics[anomaly_type][i]["precision"] for i, w in enumerate(ad_weights))
-            summary_df[f"T{idx} F1"] = [round(weighted_type_f1, 3)]
-            summary_df[f"T{idx} Recall"] = [round(weighted_type_recall, 3)]
-            summary_df[f"T{idx} Precision"] = [round(weighted_type_precision, 3)]
+            summary_df[f"T{idx} F1"] = [round(weighted_type_f1, 5)]
+            summary_df[f"T{idx} Recall"] = [round(weighted_type_recall, 5)]
+            summary_df[f"T{idx} Precision"] = [round(weighted_type_precision, 5)]
 
         # If the sheet exists, read existing data, append, and overwrite
         if file_exists and sheet_name in book.sheetnames:
@@ -477,6 +474,8 @@ def save_multiclass_AD_metrics(model_name, filename, ad_levels, global_f_scores,
 RELEVANT TO VISUALIZATION PART
 '''
 def plot_predictions_four_modes(
+    trace_index,
+    trace_name,
     true_labels,
     mode1_predicted_labels,
     mode2_predicted_labels,
@@ -485,59 +484,70 @@ def plot_predictions_four_modes(
     mode1_confidences,
     mode2_confidences,
     mode3_confidences,
-    mode4_confidences
+    mode4_confidences,
+    save_dir="results"
 ):
-    num_traces = len(true_labels)
-    fig, axes = plt.subplots(num_traces, 4, figsize=(24, 4 * num_traces))
-    plt.rcParams.update({'font.size': 10})    
-
-    if num_traces == 1:
-        axes = [axes]
-
+    os.makedirs(save_dir, exist_ok=True)
     cmap = cm.get_cmap('Reds')
+    fig = plt.figure(figsize=(16, 9))
+    gs = gridspec.GridSpec(
+        2, 3,  # 2 rows, 2 plots + 1 column for colorbar
+        width_ratios=[1, 1, 0.03],
+        height_ratios=[1, 1],
+        wspace=0.35,
+        hspace=0.35
+    )
 
-    for i, (ax_row, true, pred, masked_pred, pred3, pred4, conf, masked_conf, conf3, conf4) in enumerate(
-        zip(
-            axes,
-            true_labels,
-            mode1_predicted_labels,
-            mode2_predicted_labels,
-            mode3_predicted_labels,
-            mode4_predicted_labels,
-            mode1_confidences,
-            mode2_confidences,
-            mode3_confidences,
-            mode4_confidences
-        )
-    ):
-        def plot_mode(ax, pred_labels, conf_values, mode_name):
-            ax.plot(true, marker='o', linestyle='-', markersize=3, label="True Labels", color="green", alpha=0.7)
-            pred_points = np.array([range(len(pred_labels)), pred_labels]).T.reshape(-1, 1, 2)
-            pred_segments = np.concatenate([pred_points[:-1], pred_points[1:]], axis=1)
-            lc_pred = LineCollection(pred_segments, cmap=cmap, norm=plt.Normalize(0, 1))
-            lc_pred.set_array(np.array(conf_values))
-            lc_pred.set_linewidth(3)
-            ax.add_collection(lc_pred)
-            ax.autoscale()
-            ax.set_title(f"Trace {i} - {mode_name} Labels with Confidence")
-            ax.set_xlabel("Index")
-            ax.set_ylabel("Value")
-            ax.grid(True)
-            cbar = plt.colorbar(lc_pred, ax=ax)
-            cbar.set_label("Confidence")
-            legend_elements = [
-                Line2D([0], [0], color='green', lw=2, label='True Labels'),
-                Line2D([0], [0], color='red', lw=2, label=f'{mode_name} Labels'),
-            ]
-            ax.legend(handles=legend_elements, loc='upper right')
+    axes = [
+        fig.add_subplot(gs[0, 0]),
+        fig.add_subplot(gs[0, 1]),
+        fig.add_subplot(gs[1, 0]),
+        fig.add_subplot(gs[1, 1])
+    ]
 
-        plot_mode(ax_row[0], pred, conf, "Mode 1 Predicted")
-        plot_mode(ax_row[1], masked_pred, masked_conf, "Mode 2 Predicted")
-        plot_mode(ax_row[2], pred3, conf3, "Mode 3 Predicted")
-        plot_mode(ax_row[3], pred4, conf4, "Mode 4 Predicted")
+    all_segments = []
+    all_confidences = []
 
-    plt.tight_layout()
-    plt.show()
+    def plot_mode(ax, pred_labels, conf_values, mode_name):
+        ax.plot(true_labels[trace_index], marker='o', linestyle='-', markersize=3,
+                label="True Labels", color="green", alpha=0.7)
+        pred_points = np.array([range(len(pred_labels)), pred_labels]).T.reshape(-1, 1, 2)
+        pred_segments = np.concatenate([pred_points[:-1], pred_points[1:]], axis=1)
+        lc_pred = LineCollection(pred_segments, cmap=cmap, norm=plt.Normalize(0, 1))
+        lc_pred.set_array(np.array(conf_values))
+        lc_pred.set_linewidth(3)
+        ax.add_collection(lc_pred)
+        ax.autoscale()
+        ax.set_title(f"{mode_name}", fontsize=14)
+        ax.set_xlabel("Time Index", fontsize=12)
+        ax.set_ylabel("Class", fontsize=12)
+        ax.set_yticks(range(8))
+        ax.set_yticklabels(['Normal', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'], fontsize=11)
+        ax.grid(True)
+        legend_elements = [
+            Line2D([0], [0], color='green', lw=2, label='True Labels'),
+            Line2D([0], [0], color='red', lw=2, label=f'{mode_name} Labels'),
+        ]
+        ax.legend(handles=legend_elements, loc='upper right', fontsize=10)
+        return lc_pred, conf_values
+
+    lc1 = plot_mode(axes[0], mode1_predicted_labels[trace_index], mode1_confidences[trace_index], "Mode 1")
+    lc2 = plot_mode(axes[1], mode2_predicted_labels[trace_index], mode2_confidences[trace_index], "Mode 2")
+    lc3 = plot_mode(axes[2], mode3_predicted_labels[trace_index], mode3_confidences[trace_index], "Mode 3")
+    lc4 = plot_mode(axes[3], mode4_predicted_labels[trace_index], mode4_confidences[trace_index], "Mode 4")
+
+    # === Shared Colorbar ===
+    # Shared colorbar in rightmost column
+    cbar_ax = fig.add_subplot(gs[:, 2])  # entire right column
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(0, 1))
+    sm.set_array([])
+    cbar = plt.colorbar(sm, cax=cbar_ax)
+    cbar.set_label("Confidence", fontsize=13)
+
+    plt.tight_layout(rect=[0, 0, 0.97, 1])  # leave space for colorbar
+    output_path = os.path.join(save_dir, f"{trace_name}_prediction_modes.pdf")
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
 
 
 def visualize_prediction_probs(
